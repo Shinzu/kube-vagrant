@@ -1,0 +1,13 @@
+### Look locally for files
+#file_client: local
+#
+### Where your salt states & files are located
+#file_roots:
+#  base:
+#    - /vagrant/saltstack/salt
+#
+### Where your Pillar data is located
+#pillar_roots:
+#  base:
+#    - /vagrant/saltstack/pillar
+master: salt-master

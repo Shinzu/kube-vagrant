@@ -1,0 +1,2 @@
+include:
+  - packages.kubeadm.installed

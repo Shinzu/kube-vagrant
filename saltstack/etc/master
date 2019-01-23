@@ -1,0 +1,13 @@
+auto_accept: True
+
+file_roots:
+  base:
+    - /vagrant/saltstack/salt
+
+pillar_roots:
+  base:
+    - /vagrant/saltstack/pillar
+
+reactor:
+  - 'kubeadm/init':
+    - /vagrant/saltstack/salt/reactor/kubeadm.sls

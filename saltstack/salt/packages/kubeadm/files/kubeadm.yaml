@@ -1,0 +1,43 @@
+apiVersion: kubeadm.k8s.io/v1alpha3
+kind: InitConfiguration
+nodeRegistration:
+  kubeletExtraArgs:
+    fail-swap-on: "false"
+apiEndpoint:
+  advertiseAddress: {{ grains['ip4_interfaces']['eth1'][0] }}
+  bindPort: 8443
+---
+apiVersion: kubeadm.k8s.io/v1alpha3
+kind: ClusterConfiguration
+kubernetesVersion: {{ pillar['kubernetes_version'] }}
+nodeName: {{ grains["nodename"] }}
+certificatesDir: "/etc/kubernetes/pki"
+controlPlaneEndpoint: {{ grains['ip4_interfaces']['eth1'][0] }}:8443
+networking:
+  serviceSubnet: 10.96.0.0/12
+  dnsDomain: cluster.local
+etcd:
+  local:
+    dataDir: /data
+apiServerExtraArgs:
+  enable-admission-plugins: "Initializers,NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota"
+  feature-gates: "CustomResourceValidation=true"
+controllerManagerExtraArgs:
+  allocate-node-cidrs: "true"
+  cluster-cidr: "10.2.0.0/16"
+  bind-address: "0.0.0.0"
+  address: "0.0.0.0"
+  feature-gates: "CustomResourceValidation=true"
+schedulerExtraArgs:
+  address: "0.0.0.0"
+  feature-gates: "CustomResourceValidation=true"
+apiServerCertSANs:
+- "{{ grains['ip4_interfaces']['eth1'][0] }}"
+- "127.0.0.1"
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+clusterDomain: "cluster.local"
+clusterDNS:
+- "10.0.96.10"
+failSwapOn: false
