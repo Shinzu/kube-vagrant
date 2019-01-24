@@ -2,7 +2,7 @@
 
 With this repo you can setup a Kubernetes Cluster (commissioned with kubeadm) via vagrant.
 
-##Prerequisites
+## Prerequisites
 
 vagrant installed (>= v2.2.0) , a version < 2.2.0 needs some adjustments in Vagrantfile or env.yaml
 
@@ -17,6 +17,8 @@ this can be done simply via `vagrant plugin install <plugin name>` but there are
 
 * vagrant-libvirt: `apt-get install libxslt-dev libxml2-dev libvirt-dev zlib1g-dev ruby-dev`
 * vagrant-mutate : `apt-get install qemu-utils libvirt-dev ruby-dev`
+
+## Run the cluster
 
 after that you are ready to beginn:
 
