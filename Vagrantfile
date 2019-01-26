@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
       domain.memory = 2048
       domain.cpus = 2
     end
-    master.vm.provision "shell", inline: "sudo echo '10.0.2.50 salt-master' >> /etc/hosts"
+    master.vm.provision "shell", inline: "sudo echo '#{SUBNET}.50 salt-master' >> /etc/hosts"
     master.vm.provision :salt do |salt|
       salt.install_master = true
       salt.master_config = "saltstack/etc/master"
@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
         domain.memory = 2048
         domain.cpus = 2
       end
-      worker.vm.provision "shell", inline: "sudo echo '10.0.2.50 salt-master' >> /etc/hosts"
+      worker.vm.provision "shell", inline: "sudo echo '#{SUBNET}.50 salt-master' >> /etc/hosts"
       worker.vm.provision :salt do |salt|
         salt.minion_config = "saltstack/etc/minion"
         salt.install_type = "git"
