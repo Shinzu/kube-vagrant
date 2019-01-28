@@ -13,6 +13,7 @@ WORKER_NODES = env['worker_nodes'].to_i or 1
 WORKER_NODE_NAME = env['worker_node_name'] or 'worker'
 SUBNET = env['subnet'] or '10.0.2'
 SALT_VERSION = env['salt_version'] or '2018.3'
+NUMBER_SERVERS = MASTER_NODES + WORKER_NODES
 
 Vagrant.configure("2") do |config|
   config.vm.provider 'libvirt'
@@ -60,7 +61,7 @@ Vagrant.configure("2") do |config|
   config.trigger.after :up do |trigger|
     trigger.warn = "Running highstate"
     trigger.only_on = "master"
-    trigger.run_remote = {inline: "while true ; do salt '*' test.ping ; if [ $? -eq 0 ] ; then salt '*' state.apply ; break ; fi ; sleep 10 ; done"}
+    trigger.run_remote = {inline: "while true ; do if [ $(salt '*' test.ping | grep -i true | wc -l ) == #{NUMBER_SERVERS} ] ; then while true ; do echo 'Apply highstate on all #{NUMBER_SERVERS} Nodes' ; salt '*' state.apply ;  if [ $? -eq 0 ] ; then break ; fi ; done ; break ; fi ; echo 'Waitng that all minions respond' ; sleep 10 ; done"}
   end
 
   config.trigger.after :up do |trigger|
