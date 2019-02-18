@@ -1,6 +1,7 @@
 apiVersion: kubeadm.k8s.io/v1alpha3
 kind: InitConfiguration
 nodeRegistration:
+  name: {{ grains["nodename"] }}
   kubeletExtraArgs:
     fail-swap-on: "false"
 apiEndpoint:
@@ -10,7 +11,6 @@ apiEndpoint:
 apiVersion: kubeadm.k8s.io/v1alpha3
 kind: ClusterConfiguration
 kubernetesVersion: {{ pillar['kubernetes_version'] }}
-nodeName: {{ grains["nodename"] }}
 certificatesDir: "/etc/kubernetes/pki"
 controlPlaneEndpoint: {{ grains['ip4_interfaces']['eth1'][0] }}:8443
 networking:
